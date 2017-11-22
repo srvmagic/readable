@@ -4,16 +4,22 @@ Readable Project
 
 Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for test and code review purposes.
+These instructions will get you a copy of the project up and running on your local machine for test and code review purposes. The project consists of a front-end
+and a backend api-server
 
 Prerequisites
 
 Node and npm needs to be installed. You would also need an editor like Atom or Visual Studio to view the code
+
 Installing
 
 To check if Node is installed, open the Windows Command Prompt, PowerShell or a similar command line tool, and type node -v . This should print a version number, so you'll see something like this v0.10.35 . To see if NPM is installed, type npm -v in Terminal.
 
-At the prompt: ⋅⋅1. $npm install and once successful run ⋅⋅2. $npm start – you should see the output below: Compiled successfully!
+To install and start up the backend api-server
+At the prompt: ⋅⋅1. From readable directory cd to api-server 2. $npm install and once successful run ⋅⋅3. $node server – you should see the output below: Server listening on port 3001, Ctrl+C to stop
+
+To install and start up front end
+At the prompt: ⋅⋅1. From readable directory cd to frontend $npm install and once successful run ⋅⋅3. $npm start – you should see the output below: Compiled successfully!
 
 You can now view the readable app in the browser.
 
