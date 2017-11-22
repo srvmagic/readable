@@ -1,14 +1,26 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './components/App';
-import registerServiceWorker from './registerServiceWorker';
-import {createStore} from 'redux'
-//import reducer from './reducers'
-import {Provider} from 'react-redux'
+import React from "react";
+import ReactDOM from "react-dom";
+import configureStore from "./store/configureStore";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
+import "semantic-ui-css/semantic.min.css";
+import { Route } from "react-router";
+import { loadCategories } from "./actions/categoriesActions";
+import { loadPosts } from "./actions/postActions";
+import App from "./components/App";
 
-//const store = createStore(reducer,window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
-//console.log(store.getState())
+const store = configureStore();
+store.dispatch(loadCategories());
+store.dispatch(loadPosts());
 
-ReactDOM.render(<App/>, document.getElementById('root'));
-registerServiceWorker();
+
+ReactDOM.render(
+  <Provider store={store}>
+    <BrowserRouter>
+      <Route path="/" component={App}>
+        {" "}
+      </Route>
+    </BrowserRouter>
+  </Provider>,
+  document.getElementById("root")
+);

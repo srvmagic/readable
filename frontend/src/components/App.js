@@ -1,27 +1,22 @@
-import React, { Component } from 'react'
-import '../w3.css'
-import ListPosts from './ListPosts'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import Main from './Main';
+import * as categoriesActions from '../actions/categoriesActions';
+import * as postActions from  '../actions/postActions';
+import * as commentActions from  '../actions/commentActions';
 
-
-class App extends Component {
-  render () {
-    return (
-      <div >
-        <div class='w3-bar-item w3-button w3-grey' data-tab='first'>
-         <ListPosts />
-        </div>
-        <div class='w3-bar-item w3-button' data-tab='first'>
-          First
-        </div>
-        <div class='w3-bar-item w3-button' data-tab='second'>
-          Second
-        </div>
-        <div class='w3-bar-item w3-button' data-tab='third'>
-          Third
-        </div>
-      </div>
-    )
-  }
+function mapDispachToProps(dispatch) {
+  
+  return {
+    actions: {
+      categoriesActions: bindActionCreators(categoriesActions, dispatch),
+      postActions: bindActionCreators(postActions, dispatch),
+      commentActions: bindActionCreators(commentActions, dispatch),
+      
+    }
+  };
 }
 
-export default App
+const App = connect(null, mapDispachToProps)(Main);
+
+export default App;
