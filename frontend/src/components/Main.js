@@ -1,18 +1,20 @@
 import React, { Component } from "react";
-import { Route,Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Post from "./Post";
 import EditPost from "./EditPost";
+import PostDetail from "./PostDetail";
 import EditComment from "./EditComment";
 import Comment from "./Comment";
-import ListCategories from "./ListCategories";
 import ListPosts from "./ListPosts";
+import NotFoundPage from "./NotFoundPage";
 
 class Main extends Component {
   render() {
     return (
       <div>
         <Switch>
-          <Route exact path="/" render={() => <ListCategories />} />
+          <Route exact path="/" render={() => <ListPosts />} />
+
           <Route
             path="/add"
             render={({ history }) => (
@@ -24,6 +26,7 @@ class Main extends Component {
               />
             )}
           />
+
           <Route
             exact
             path="/:category/:parentId/addComment"
@@ -36,10 +39,22 @@ class Main extends Component {
               />
             )}
           />
+
           <Route
             exact
-            path="/:category/:postId"
+            path="/:category/:postId/edit"
             render={({ history }) => <EditPost />}
+          />
+          <Route
+            
+            path="/:category/:postId"
+            render={({ history }) => (
+              <PostDetail
+                onDeletePost={post => {
+                  history.replace("/");
+                }}
+              />
+            )}
           />
           <Route
             exact
@@ -48,9 +63,10 @@ class Main extends Component {
           />
           <Route
             exact
-            path="/react"
-            render={({ history }) => <ListPosts {...this.props} />}
+            path="/:category"
+            render={({ history }) => <ListPosts {...this.props} cats=''/>}
           />
+          <Route path="*" render={({ history }) => <NotFoundPage />} />
         </Switch>
       </div>
     );

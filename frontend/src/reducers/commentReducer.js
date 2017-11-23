@@ -21,14 +21,10 @@ export default function commentReducer(state = {}, action) {
         }
       ];
     case types.REMOVE_COMMENT_SUCCESS:
-      return state.map(comment => {
-        if (comment.id === action.comment.id) {
-          return Object.assign({}, comment, {
-            deleted: true
-          });
-        }
-        return comment;
-      });
+    return [
+      ...state.slice(0,action.idx),
+      ...state.slice(action.idx + 1)
+      ]  
     case types.VOTE_COMMENT_SUCCESS:
       return state.map(comment => {
         if (comment.id === action.comment.id) {

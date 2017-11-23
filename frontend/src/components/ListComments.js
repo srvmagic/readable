@@ -12,8 +12,9 @@ class ListComments extends Component {
     postId: PropTypes.object.isRequired,
   };  
   delete = (event, comment) => {
+    var idx = this.props.comments.map(function(x) {return x.id; }).indexOf(comment.id);    
     event.preventDefault();
-    this.props.actions.deleteComment(comment.id);
+    this.props.actions.deleteComment(comment.id,idx);
   };
   upvote = (event, comment) => {
     event.preventDefault();
@@ -65,17 +66,17 @@ class ListComments extends Component {
                     onClick={e => this.downvote(e, comment)}
                   />
                 </Table.Cell>
-                <Table.HeaderCell>
+                <Table.Cell>
                   <Link to={`/${this.props.match.params.category}/${comment.parentId}/comments/${comment.id}`}>
                     <i class="blue edit icon" />
                   </Link>
-                </Table.HeaderCell>
-                <Table.HeaderCell>
+                </Table.Cell>
+                <Table.Cell>
                   <i
                     class="blue delete icon"
                     onClick={e => this.delete(e, comment)}
                   />
-                </Table.HeaderCell>
+                </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>

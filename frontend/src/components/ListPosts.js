@@ -1,15 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Table } from "semantic-ui-react";
+import { Table,Menu, Container } from "semantic-ui-react";
 import * as postActions from "../actions/postActions";
 import { bindActionCreators } from "redux";
 import { Link, withRouter } from "react-router-dom";
 
 
 class ListPosts extends Component {
-  delete = (event, post) => {
+  constructor(props) {
+    super(props)
+    this.state = {
+      activeItem: '',
+    };    
+  }  
+  delete = (event, post, idx) => {
     event.preventDefault();
-    this.props.actions.deletePost(post.id);
+    this.props.actions.deletePost(post.id, idx);
   };
   upvote = (event, post) => {
     event.preventDefault();
@@ -19,18 +25,53 @@ class ListPosts extends Component {
     event.preventDefault();
     this.props.actions.downvotePost(post.id);
   };
-
+  handleClick = (event, data) => {
+    if (event.target.text.toLowerCase() === "all posts") {
+      this.props.actions.loadPosts();
+    } else {
+      this.props.actions.loadSpecificPosts(event.target.text.toLowerCase());
+    }
+    this.setState({ activeItem: event.target.text.toLowerCase() });
+  };
   render() {
-
-    let posts = this.props.posts;
+    const activeItem = this.state
+    const posts = this.props.posts;
     var dataArray = [];
     for (var key in posts) {
       if (!posts[key].deleted) {
         dataArray.push(posts[key]);
       }
     }
+    const x = this.props.categories;
+    var cats = [];
+    for (var o in x.categories) {
+      cats.push(x.categories[o].name);
+    }    
     return (
       <div>
+      <Container textAlign="left">
+        <Menu pointing inverted>
+          <Link to="/">
+            <Menu.Item
+              name="All Posts"
+              active={activeItem === "All Posts"}
+              onClick={this.handleClick}
+            />
+          </Link>
+
+          {cats.map(category => (
+            <Link to={`/${category}`}>
+              <Menu.Item
+                name={category}
+                link
+                active={activeItem === {category}}
+                onClick={this.handleClick}
+              />
+            </Link>
+          ))}
+        </Menu>
+        </Container>
+        <Container textAlign="left">
         <Table celled sortable>
           <Table.Header color="green">
             <Table.Row>
@@ -39,13 +80,14 @@ class ListPosts extends Component {
               <Table.HeaderCell>No. of comments</Table.HeaderCell>
               <Table.HeaderCell>Current Score</Table.HeaderCell>
               <Table.HeaderCell>Vote on post</Table.HeaderCell>
+              <Table.HeaderCell>View post detail</Table.HeaderCell>              
               <Table.HeaderCell>Edit Post</Table.HeaderCell>
               <Table.HeaderCell>Delete Post</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
 
           <Table.Body>
-            {dataArray.map(post => (
+            {dataArray.map((post,idx) => (
               <Table.Row>
                 <Table.Cell>{post.title}</Table.Cell>
                 <Table.Cell>{post.author}</Table.Cell>
@@ -61,21 +103,32 @@ class ListPosts extends Component {
                     onClick={e => this.downvote(e, post)}
                   />
                 </Table.Cell>
-                <Table.HeaderCell>
-                  <Link to={`/${post.category}/${post.id}`}>
+                <Table.Cell>
+                <Link to={`/${post.category}/${post.id}`}>
+                  <i class="green content icon" />
+                </Link>
+              </Table.Cell>                
+                <Table.Cell>
+                  <Link to={`/${post.category}/${post.id}/edit`}>
                     <i class="green edit icon" />
                   </Link>
-                </Table.HeaderCell>
-                <Table.HeaderCell>
+                </Table.Cell>
+                <Table.Cell>
                   <i
                     class="green delete icon"
-                    onClick={e => this.delete(e, post)}
+                    onClick={e => this.delete(e, post, idx)}
                   />
-                </Table.HeaderCell>
+                </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>
         </Table>
+        <Container textAlign="right">
+          <Link to="/add">
+            Add a post <i class="green plus icon" />
+          </Link>
+        </Container>
+        </Container>
         <div />
       </div>
     );
@@ -83,7 +136,7 @@ class ListPosts extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  return { posts: state.posts };
+  return { posts: state.posts, categories:state.categories };
 }
 
 function mapDispatchToProps(dispatch) {

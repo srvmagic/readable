@@ -20,15 +20,11 @@ export default function postReducer(state = {}, action) {
           deleted: false
         }
       ];
-    case types.REMOVE_POST_SUCCESS:
-      return state.map(post => {
-        if (post.id === action.post.id) {
-          return Object.assign({}, post, {
-            deleted: true
-          });
-        }
-        return post;
-      });
+    case types.REMOVE_POST_SUCCESS:   
+    return [
+      ...state.slice(0,action.idx),
+      ...state.slice(action.idx + 1)
+      ]      
     case types.VOTE_POST_SUCCESS:
       return state.map(post => {
         if (post.id === action.post.id) {

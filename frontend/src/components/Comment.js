@@ -32,7 +32,6 @@ class Comment extends Component {
   }
 
   render() {
-    console.log(this.props.match.params.category);
 
     return (
       <Container textAlign="center">
@@ -58,7 +57,6 @@ class Comment extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  console.log(ownProps);
   return { posts: state.posts };
 }
 

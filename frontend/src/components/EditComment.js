@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import * as commentActions from "../actions/commentActions";
 import { bindActionCreators } from "redux";
+import { browserHistory } from "react-router";
 
 class EditComment extends Component {
   static propTypes = {
@@ -16,11 +17,13 @@ class EditComment extends Component {
     body: PropTypes.string.isRequired,
     time: PropTypes.string.isRequired    
   };
+  static contextTypes = {
+    router: () => true, 
+  }  
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    
+    this.handleChange = this.handleChange.bind(this);    
     this.state = {
       parentId: props.parentId,
       id: props.id,
@@ -62,12 +65,9 @@ class EditComment extends Component {
           Body:<textarea ref="body" name ="body" onChange={e => this.handleChange(e)} placeholder="Body" value={localStorage.getItem("body")}/>
           Time of Comment:
           <Moment format="MM/DD/YYYY HH:MM:SS">{this.props.time}</Moment>          
-          <Link
-            to={`/${this.props.match.params.category}/${this.props.match.params
-              .parentId}`}
-          >
-            <Button>Go Back</Button>
-          </Link>
+
+        
+            <Button onClick={this.context.router.history.goBack}>Go Back</Button>
           <Button type="submit">Save this Comment</Button>
         </Form>
       </div>

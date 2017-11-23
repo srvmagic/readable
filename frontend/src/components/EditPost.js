@@ -26,14 +26,12 @@ class EditPost extends Component {
   constructor(props, context) {
     super(props, context);
     this.saves = this.saves.bind(this);
-    this.preview = this.preview.bind(this);
     this.delete = this.delete.bind(this);
     this.edits = this.edits.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.findAllComments = this.findAllComments.bind(this);
     this.state = {
-      isEditing: true,
       activeIndex: -1,
       title: '',
       body: '',
@@ -90,8 +88,9 @@ class EditPost extends Component {
   
   }
   delete = (event, id) => {
+    var idx = this.props.posts.map(function(x) {return x.id; }).indexOf(id);    
     event.preventDefault();
-    this.props.postActions.deletePost(id);
+    this.props.postActions.deletePost(id,idx);
   };
   handleChange(event) {
     const name = event.target.name;
@@ -111,14 +110,8 @@ class EditPost extends Component {
       time: localStorage.getItem('time'),
     });
   }
-  
-  preview(event) {
-    event.preventDefault();
-    this.setState({ isEditing: false });
-  }
   edits(event) {
     event.preventDefault();
-    this.setState({ isEditing: true });
   }
   upvote = (event, id) => {
     event.preventDefault();
@@ -136,66 +129,6 @@ class EditPost extends Component {
     for (var o in x.categories) {
       dataArray.push(x.categories[o]);
     }
-    if (this.state.isEditing === false) {
-      return (
-        <Container textAlign="left">
-          <div className="w3-card-4">
-            <Header as="h3" dividing color="green">
-              Preview Post
-            </Header>
-
-            <Segment.Group>
-              <Segment>
-                Title:{" "}
-                <Input transparent value={localStorage.getItem("title")} />
-              </Segment>
-              <Segment>
-                VoteScore:{" "}
-                <Input transparent value={localStorage.getItem("voteScore")} />
-              </Segment>
-              <Segment>
-                Author:<Input
-                  transparent
-                  value={localStorage.getItem("author")}
-                />
-              </Segment>
-              <Segment>
-                Category:<Input
-                  transparent
-                  value={localStorage.getItem("category")}
-                />
-              </Segment>
-              <Segment>
-                Time of Post:{" "}
-                <Moment format="MM/DD/YYYY HH:MM:SS">{this.props.time}</Moment>
-              </Segment>
-              <Segment>
-                Body: <Input
-                  transparent
-                  value={localStorage.getItem("body")}
-                />{" "}
-              </Segment>
-            </Segment.Group>
-            <Container textAlign="right">
-              <Button>
-                <Link to="/">Go Back</Link>
-              </Button>
-              <Button onClick={this.edits}>Edit this Post</Button>
-            </Container>
-            <Container textAlign="right">
-              <Link to="/addComment">
-                Add a comment <i class="green plus icon" />
-              </Link>
-            </Container>
-            <Container textAlign="center">
-              <ListComments />
-            </Container>
-            <div />
-          </div>
-        </Container>
-      );
-    }
-
     return (
       <Container textAlign="center">
         <div className="w3-card-4">
@@ -263,7 +196,6 @@ class EditPost extends Component {
             <Button onClick={e => this.delete(e, localStorage.getItem("id"))}>
               <Link to="/">Delete this Post</Link>
             </Button>
-            <Button onClick={this.preview}>Preview this Post</Button>
           </Form>
           <Container textAlign="left">
             <Accordion>

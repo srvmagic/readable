@@ -25,4 +25,4 @@ You can now view the readable app in the browser.
 
 Local: http://localhost:3000/
 
-Attributions: I have used  w3.css styling from w3schools.com and Semantic UI React 0.76.0
+Attributions: I have used  w3.css styling from w3schools.com and Semantic UI React 0.76.0 

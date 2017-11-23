@@ -20,18 +20,18 @@ export function addPost(post) {
   };
 }
 
-export function deletePostSuccess(post) {
+export function deletePostSuccess(idx) {
   return {
     type: types.REMOVE_POST_SUCCESS,
-    post
+    idx
   };
 }
 
-export function deletePost(id) {
+export function deletePost(id, idx) {
   return function(dispatch) {
     return ReadableApi.deletePost(id)
       .then(post => {
-        dispatch(deletePostSuccess(post));
+        dispatch(deletePostSuccess(idx));
       })
       .catch(error => {
         throw error;

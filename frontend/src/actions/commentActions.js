@@ -18,17 +18,17 @@ export function addComment(comment) {
   };
 }
 
-export function deleteCommentSuccess(comment) {
+export function deleteCommentSuccess(idx) {
   return {
     type: types.REMOVE_COMMENT_SUCCESS,
-    comment
+    idx
   };
 }
 
-export function deleteComment(id) {
+export function deleteComment(id,idx) {
   return function(dispatch) {
     return ReadableApi.deleteComment(id).then(comment => {
-      dispatch(deleteCommentSuccess(comment));
+      dispatch(deleteCommentSuccess(idx));
     }).catch(error => {
       throw(error);
     });

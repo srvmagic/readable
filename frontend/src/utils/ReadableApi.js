@@ -68,8 +68,6 @@ class ReadableApi {
   }
 
   static addComment(comment) {
-    console.log("comment");
-    console.log(comment);
     return fetch(`http://localhost:3001/comments`, {
       method: "post",
       headers: {
@@ -95,9 +93,7 @@ class ReadableApi {
       });
   }
   static editComment(id, comment) {
-    console.log(id)
-    console.log(comment)
-    
+   
     return fetch(`http://localhost:3001/comments/${id}`, {
       method: "put",
       headers: {
