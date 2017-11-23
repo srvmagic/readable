@@ -58,9 +58,6 @@ class PostDetail extends Component {
       localStorage.getItem("id")
     );
   }
-  componentDidMount(){
-    console.log('IN HEREREEEEEEEEEE')
-  }
   delete = (event, id,idx) => {
     var idx = this.props.posts.map(function(x) {return x.id; }).indexOf(id);
     event.preventDefault();

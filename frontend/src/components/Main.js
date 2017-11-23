@@ -16,6 +16,7 @@ class Main extends Component {
           <Route exact path="/" render={() => <ListPosts />} />
 
           <Route
+          exact
             path="/add"
             render={({ history }) => (
               <Post
@@ -46,7 +47,7 @@ class Main extends Component {
             render={({ history }) => <EditPost />}
           />
           <Route
-            
+            exact
             path="/:category/:postId"
             render={({ history }) => (
               <PostDetail

@@ -10,7 +10,6 @@ import { browserHistory } from "react-router";
 
 class EditComment extends Component {
   static propTypes = {
-    comments: PropTypes.array.isRequired,
     id: PropTypes.object.isRequired,
     parentId: PropTypes.object.isRequired,    
     author: PropTypes.string.isRequired,
@@ -27,9 +26,9 @@ class EditComment extends Component {
     this.state = {
       parentId: props.parentId,
       id: props.id,
-      author: props.author,
-      body: props.body,
-      time: props.time,
+      author: localStorage.getItem("author"),
+      body:  localStorage.getItem("body"),
+      time:  localStorage.getItem("time"),
     };    
   }
   handleChange(event) {
@@ -42,7 +41,6 @@ class EditComment extends Component {
     
   }
   handleSubmit(event) {
-    event.preventDefault();
     this.props.actions.editComment(this.props.id, {
       timestamp: Date.now(),
       parentId: this.props.parentId,
@@ -52,6 +50,9 @@ class EditComment extends Component {
       deleted: false,
       parentDeleted: false
     });
+    localStorage.setItem("author", this.refs.author.value);
+    localStorage.setItem("body",this.refs.body.value);
+    localStorage.setItem("time", Date.now());      
   }
 
   render() {
@@ -79,25 +80,27 @@ function mapStateToProps(state, ownProps) {
   const commentId = ownProps.match.params.commentId;
   const parentId = ownProps.match.params.parentId;
   let k = Object.assign({}, state.comments);
-  let author,body,time = {};
+  let author,body,time,voteScore = {};
   for (var o in state.comments) {
     if (k[o].id === commentId) {
       author = k[o].author;
       body = k[o].body;
       time = k[o].timestamp;
+      voteScore= k[o].voteScore;
+      localStorage.setItem("author", author);
+      localStorage.setItem("body", body);
+      localStorage.setItem("time", time);      
+      localStorage.setItem("voteScore", voteScore);      
     }
   }
-  localStorage.setItem("author", author);
-  localStorage.setItem("body", body);
-  localStorage.setItem("time", time);
 
   return {
     id: commentId,
     parentId: parentId,
-    comments: state.comments,
     author: author,
     body: body,
     time: time,
+    voteScore:voteScore
   };
 }
 

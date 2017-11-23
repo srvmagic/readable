@@ -33,12 +33,12 @@ class EditPost extends Component {
     this.findAllComments = this.findAllComments.bind(this);
     this.state = {
       activeIndex: -1,
-      title: '',
-      body: '',
-      author: '',
-      category: '',
-      voteScore: '',
-      commentCount:''
+      title: localStorage.getItem("title"),
+      body: localStorage.getItem("body"),
+      author: localStorage.getItem("author"),
+      category: localStorage.getItem("category"),
+      voteScore: localStorage.getItem("voteScore"),
+      commentCount:localStorage.getItem("commentCount")
     };    
   }
   handleClick = (e, titleProps, id) => {
@@ -61,9 +61,9 @@ class EditPost extends Component {
   saves(event) {
     setLocal("title", this.refs.title.value);
     setLocal("author", this.refs.author.value);
-    setLocal("body",this.refs.author.value);
-    setLocal("category", this.refs.author.value);
-    setLocal("voteScore", this.refs.author.value);
+    setLocal("body",this.refs.body.value);
+    setLocal("category", this.refs.category.value);
+    setLocal("voteScore", this.refs.voteScore.value);
     setLocal("time", Date.now());    
     this.props.postActions.editPost(this.props.match.params.postId, {
       id: this.props.match.params.postId,
@@ -229,6 +229,7 @@ class EditPost extends Component {
   }
 }
 function mapStateToProps(state, ownProps) {
+  console.log('mapStateToProps')
   const postId = ownProps.match.params.postId;
   let k = Object.assign({}, state.posts);
   for (var o in state.posts) {

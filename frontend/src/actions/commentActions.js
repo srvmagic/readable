@@ -42,10 +42,10 @@ export function editCommentSuccess(comment) {
   };
 }
 
-export function editComment(id,comment) {
+export function editComment(id,orgcomment) {
   return function(dispatch) {
-    return ReadableApi.editComment(id,comment).then(comment => {
-      dispatch(editCommentSuccess(comment));
+    return ReadableApi.editComment(id,orgcomment).then(comment => {
+      dispatch(editCommentSuccess(orgcomment));
     }).catch(error => {
       throw(error);
     });

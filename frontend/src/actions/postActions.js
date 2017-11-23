@@ -47,11 +47,12 @@ export function editPostSuccess(post) {
   };
 }
 
-export function editPost(id, post) {
+export function editPost(id, opost) {
   return function(dispatch) {
-    return ReadableApi.editPost(id, post)
-      .then(post => {
-        dispatch(editPostSuccess(post));
+    return ReadableApi.editPost(id, opost)
+      .then(opost => {
+        console.log(opost)
+        dispatch(editPostSuccess(opost));
       })
       .catch(error => {
         throw error;
@@ -129,3 +130,16 @@ export function fetchSpecificPostsSuccess(posts) {
   return { type: types.LOAD_SPECIFIC_POSTS_SUCCESS, posts };
 }
 
+export function sortScoreAsc(posts){
+  return { type: types.SORT_SCORE_ASC_SUCCESS, posts };
+}
+export function sortScoreDesc(posts){
+  return { type: types.SORT_SCORE_DESC_SUCCESS, posts };
+}
+
+export function sortTimeAsc(posts){
+  return { type: types.SORT_TIME_ASC_SUCCESS, posts };
+}
+export function sortTimeDesc(posts){
+  return { type: types.SORT_TIME_DESC_SUCCESS, posts };
+}

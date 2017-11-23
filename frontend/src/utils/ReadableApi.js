@@ -93,7 +93,6 @@ class ReadableApi {
       });
   }
   static editComment(id, comment) {
-   
     return fetch(`http://localhost:3001/comments/${id}`, {
       method: "put",
       headers: {

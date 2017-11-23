@@ -35,12 +35,8 @@ export default function commentReducer(state = {}, action) {
         return comment;
       });
     case types.EDIT_COMMENT_SUCCESS:
-      return state.map(comment => {
-        if (comment.id === action.comment.id) {
-          return Object.assign({}, comment);
-        }
-        return comment;
-      });
+    console.log(action.comment)
+        return action.comment
     default:
       return state;
   }
