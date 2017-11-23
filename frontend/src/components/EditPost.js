@@ -9,7 +9,7 @@ import {
   Accordion,
   Icon
 } from "semantic-ui-react";
-import { Link, withRouter } from "react-router-dom";
+import { Link, withRouter, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import * as postActions from "../actions/postActions";
@@ -17,11 +17,12 @@ import * as commentActions from "../actions/commentActions";
 import { bindActionCreators } from "redux";
 import { Container } from "semantic-ui-react";
 import ListComments from "./ListComments";
+import NotFoundPage from "./NotFoundPage";
 
 class EditPost extends Component {
   static propTypes = {
     categories: PropTypes.array.isRequired,
-    posts: PropTypes.array.isRequired,
+    posts: PropTypes.array.isRequired
   };
   constructor(props, context) {
     super(props, context);
@@ -38,12 +39,15 @@ class EditPost extends Component {
       author: localStorage.getItem("author"),
       category: localStorage.getItem("category"),
       voteScore: localStorage.getItem("voteScore"),
-      commentCount:localStorage.getItem("commentCount")
-    };    
+      commentCount: localStorage.getItem("commentCount"),
+      deleted: localStorage.getItem("deleted")
+    };
   }
+
   handleClick = (e, titleProps, id) => {
     const commentList = this.props.commentActions.loadSpecificComments(
-      localStorage.getItem("id"))
+      localStorage.getItem("id")
+    );
     const { index } = titleProps;
     const activeIndex = this.state.activeIndex;
     const newIndex = activeIndex === index ? -1 : index;
@@ -53,7 +57,7 @@ class EditPost extends Component {
     localStorage.setItem("commentCount", commentList.length);
     this.setState({ commentCount: commentList.length });
   };
-  findAllComments(id){
+  findAllComments(id) {
     return this.props.commentActions.loadSpecificComments(
       localStorage.getItem("id")
     );
@@ -61,10 +65,9 @@ class EditPost extends Component {
   saves(event) {
     setLocal("title", this.refs.title.value);
     setLocal("author", this.refs.author.value);
-    setLocal("body",this.refs.body.value);
+    setLocal("body", this.refs.body.value);
     setLocal("category", this.refs.category.value);
-    setLocal("voteScore", this.refs.voteScore.value);
-    setLocal("time", Date.now());    
+    setLocal("time", Date.now());
     this.props.postActions.editPost(this.props.match.params.postId, {
       id: this.props.match.params.postId,
       timestamp: Date.now(),
@@ -76,7 +79,7 @@ class EditPost extends Component {
       deleted: false,
       commentCount: this.findAllComments(this.props.match.params.postId).length
     });
-    this.setState({      
+    this.setState({
       timestamp: Date.now(),
       title: this.refs.title.value,
       body: this.refs.body.value,
@@ -84,13 +87,18 @@ class EditPost extends Component {
       category: this.refs.category.value,
       voteScore: this.state.voteScore,
       deleted: false,
-      commentCount: this.findAllComments(this.props.match.params.postId)})
-  
+      commentCount: this.findAllComments(this.props.match.params.postId)
+    });
   }
   delete = (event, id) => {
-    var idx = this.props.posts.map(function(x) {return x.id; }).indexOf(id);    
+    var idx = this.props.posts
+      .map(function(x) {
+        return x.id;
+      })
+      .indexOf(id);
     event.preventDefault();
-    this.props.postActions.deletePost(id,idx);
+    this.props.postActions.deletePost(id, idx);
+    localStorage.clear();
   };
   handleChange(event) {
     const name = event.target.name;
@@ -98,16 +106,15 @@ class EditPost extends Component {
       [name]: event.target.value
     });
     localStorage.setItem(name, event.target.value);
-    
   }
   componentWillMount() {
     this.setState({
-      title: localStorage.getItem('title'),
-      author: localStorage.getItem('author'),
-      body: localStorage.getItem('body'),
-      category: localStorage.getItem('category'),
-      voteScore: localStorage.getItem('voteScore'),
-      time: localStorage.getItem('time'),
+      title: localStorage.getItem("title"),
+      author: localStorage.getItem("author"),
+      body: localStorage.getItem("body"),
+      category: localStorage.getItem("category"),
+      voteScore: localStorage.getItem("voteScore"),
+      time: localStorage.getItem("time")
     });
   }
   edits(event) {
@@ -123,6 +130,9 @@ class EditPost extends Component {
   };
 
   render() {
+    if (localStorage.getItem("deleted") === null) {
+      return <NotFoundPage />;
+    }
     const activeIndex = this.state.activeIndex;
     let x = this.props.categories;
     const dataArray = [];
@@ -185,7 +195,9 @@ class EditPost extends Component {
                 onClick={e => this.downvote(e, localStorage.getItem("id"))}
               />
               Time of Post:
-              <Moment format="MM/DD/YYYY HH:MM:SS">{this.props.time}</Moment>
+              <Moment format="MM/DD/YYYY HH:MM:SS">
+                {this.props.timestamp}
+              </Moment>
             </Container>
             <Button>
               <Link to="/">Go Back</Link>
@@ -205,7 +217,7 @@ class EditPost extends Component {
                 onClick={this.handleClick}
               >
                 <Icon name="dropdown" />
-                Comments 
+                Comments
               </Accordion.Title>
               <Accordion.Content active={activeIndex === 0}>
                 <ListComments {...this.props} />
@@ -229,7 +241,6 @@ class EditPost extends Component {
   }
 }
 function mapStateToProps(state, ownProps) {
-  console.log('mapStateToProps')
   const postId = ownProps.match.params.postId;
   let k = Object.assign({}, state.posts);
   for (var o in state.posts) {
@@ -244,6 +255,7 @@ function mapStateToProps(state, ownProps) {
       setLocal("time", l.time);
       setLocal("comments", []);
       setLocal("commentCount", l.commentCount);
+      setLocal("deleted", l.deleted);
     }
   }
   return {
@@ -252,11 +264,11 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-function setLocal(name,value){
-  localStorage.setItem(name,value)
+function setLocal(name, value) {
+  localStorage.setItem(name, value);
 }
 
-function mapDispatchToProps(dispatch) {  
+function mapDispatchToProps(dispatch) {
   return {
     postActions: bindActionCreators(postActions, dispatch),
     commentActions: bindActionCreators(commentActions, dispatch)

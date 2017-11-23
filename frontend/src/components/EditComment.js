@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import * as commentActions from "../actions/commentActions";
 import { bindActionCreators } from "redux";
 import { browserHistory } from "react-router";
-
+import NotFoundPage from "./NotFoundPage";
 class EditComment extends Component {
   static propTypes = {
     id: PropTypes.object.isRequired,
@@ -56,6 +56,9 @@ class EditComment extends Component {
   }
 
   render() {
+    if (localStorage.getItem("deleted") === null) {
+      return <NotFoundPage />;
+    }
     return (
       <div className="w3-card-4">
         <Header as="h3" dividing color="blue">

@@ -105,6 +105,7 @@ function disable (token, id) {
     return new Promise((res) => {
       let posts = getData(token)
       posts[id].deleted = true
+      console.log(posts[id])
       res(posts[id])
     })
 }

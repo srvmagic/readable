@@ -51,7 +51,6 @@ export function editPost(id, opost) {
   return function(dispatch) {
     return ReadableApi.editPost(id, opost)
       .then(opost => {
-        console.log(opost)
         dispatch(editPostSuccess(opost));
       })
       .catch(error => {

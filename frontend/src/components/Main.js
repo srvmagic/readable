@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch,Redirect  } from "react-router-dom";
 import Post from "./Post";
 import EditPost from "./EditPost";
 import PostDetail from "./PostDetail";

@@ -15,6 +15,7 @@ class ListComments extends Component {
     var idx = this.props.comments.map(function(x) {return x.id; }).indexOf(comment.id);    
     event.preventDefault();
     this.props.actions.deleteComment(comment.id,idx);
+    localStorage.clear()    
   };
   upvote = (event, comment) => {
     event.preventDefault();

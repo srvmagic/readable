@@ -21,6 +21,7 @@ export default function postReducer(state = {}, action) {
         }
       ];
     case types.REMOVE_POST_SUCCESS:
+    console.log(action.post)
       return [...state.slice(0, action.idx), ...state.slice(action.idx + 1)];
     case types.VOTE_POST_SUCCESS:
       return state.map(post => {

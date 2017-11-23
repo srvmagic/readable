@@ -17,6 +17,7 @@ import * as commentActions from "../actions/commentActions";
 import { bindActionCreators } from "redux";
 import { Container } from "semantic-ui-react";
 import ListComments from "./ListComments";
+import NotFoundPage from "./NotFoundPage";
 
 class PostDetail extends Component {
   static propTypes = {
@@ -62,7 +63,7 @@ class PostDetail extends Component {
     var idx = this.props.posts.map(function(x) {return x.id; }).indexOf(id);
     event.preventDefault();
     this.props.postActions.deletePost(id,idx);
-
+    localStorage.clear();
   };
   handleChange(event) {
     const name = event.target.name;
@@ -83,6 +84,9 @@ class PostDetail extends Component {
   }
 
   render() {
+    if (localStorage.getItem("deleted") === null) {
+      return <NotFoundPage />;
+    }
     const activeIndex = this.state.activeIndex;
     return (
       <div>
@@ -176,6 +180,7 @@ function mapStateToProps(state, ownProps) {
       setLocal("time", l.time);
       setLocal("comments", []);
       setLocal("commentCount", l.commentCount);
+setLocal("deleted", l.deleted);
     }
   }
   return {
