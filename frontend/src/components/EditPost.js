@@ -22,7 +22,8 @@ import NotFoundPage from "./NotFoundPage";
 class EditPost extends Component {
   static propTypes = {
     categories: PropTypes.array.isRequired,
-    posts: PropTypes.array.isRequired
+    post: PropTypes.object.isRequired,
+    posts: PropTypes.array.isRequired,
   };
   constructor(props, context) {
     super(props, context);
@@ -34,40 +35,35 @@ class EditPost extends Component {
     this.findAllComments = this.findAllComments.bind(this);
     this.state = {
       activeIndex: -1,
-      title: localStorage.getItem("title"),
-      body: localStorage.getItem("body"),
-      author: localStorage.getItem("author"),
-      category: localStorage.getItem("category"),
-      voteScore: localStorage.getItem("voteScore"),
-      commentCount: localStorage.getItem("commentCount"),
-      deleted: localStorage.getItem("deleted")
+      title: this.props.post.title,
+      author: this.props.post.author,
+      body: this.props.post.body,
+      category: this.props.post.category,
+      voteScore: this.props.post.voteScore,
+      deleted: this.props.post.deleted,
+      timestamp: this.props.post.timestamp,
+      commentCount: this.props.post.commentCount
     };
   }
 
   handleClick = (e, titleProps, id) => {
     const commentList = this.props.commentActions.loadSpecificComments(
-      localStorage.getItem("id")
+      this.props.match.params.postId
     );
     const { index } = titleProps;
     const activeIndex = this.state.activeIndex;
     const newIndex = activeIndex === index ? -1 : index;
     this.setState({ activeIndex: newIndex });
     this.setState({ comments: commentList });
-    localStorage.setItem("comments", commentList);
-    localStorage.setItem("commentCount", commentList.length);
     this.setState({ commentCount: commentList.length });
   };
   findAllComments(id) {
     return this.props.commentActions.loadSpecificComments(
-      localStorage.getItem("id")
+      this.props.match.params.postId
     );
   }
   saves(event) {
-    setLocal("title", this.refs.title.value);
-    setLocal("author", this.refs.author.value);
-    setLocal("body", this.refs.body.value);
-    setLocal("category", this.refs.category.value);
-    setLocal("time", Date.now());
+    event.preventDefault();
     this.props.postActions.editPost(this.props.match.params.postId, {
       id: this.props.match.params.postId,
       timestamp: Date.now(),
@@ -76,19 +72,18 @@ class EditPost extends Component {
       author: this.refs.author.value,
       category: this.refs.category.value,
       voteScore: this.state.voteScore,
-      deleted: false,
       commentCount: this.findAllComments(this.props.match.params.postId).length
     });
-    this.setState({
-      timestamp: Date.now(),
-      title: this.refs.title.value,
-      body: this.refs.body.value,
-      author: this.refs.author.value,
-      category: this.refs.category.value,
-      voteScore: this.state.voteScore,
-      deleted: false,
-      commentCount: this.findAllComments(this.props.match.params.postId)
-    });
+    // this.setState({
+    //   timestamp: Date.now(),
+    //   title: this.refs.title.value,
+    //   body: this.refs.body.value,
+    //   author: this.refs.author.value,
+    //   category: this.refs.category.value,
+    //   voteScore: this.state.voteScore,
+    //   deleted: false,
+    //   commentCount: this.findAllComments(this.props.match.params.postId)
+    // });
   }
   delete = (event, id) => {
     var idx = this.props.posts
@@ -98,41 +93,40 @@ class EditPost extends Component {
       .indexOf(id);
     event.preventDefault();
     this.props.postActions.deletePost(id, idx);
-    localStorage.clear();
   };
   handleChange(event) {
     const name = event.target.name;
     this.setState({
       [name]: event.target.value
     });
-    localStorage.setItem(name, event.target.value);
-  }
-  componentWillMount() {
-    this.setState({
-      title: localStorage.getItem("title"),
-      author: localStorage.getItem("author"),
-      body: localStorage.getItem("body"),
-      category: localStorage.getItem("category"),
-      voteScore: localStorage.getItem("voteScore"),
-      time: localStorage.getItem("time")
-    });
   }
   edits(event) {
     event.preventDefault();
   }
   upvote = (event, id) => {
-    event.preventDefault();
+    //event.preventDefault();
     this.props.postActions.upvotePost(id);
   };
   downvote = (event, id) => {
     event.preventDefault();
     this.props.postActions.downvotePost(id);
   };
+  componentWillReceiveProps(nextProps) {
+    if (this.props.post.id !== nextProps.post.id) {
+      this.setState({
+        title: nextProps.post.title,
+        author: nextProps.post.author,
+        body: nextProps.post.body,
+        category: nextProps.post.category,
+        deleted: nextProps.post.deleted,
+        voteScore: nextProps.post.voteScore,
+        timestamp: nextProps.post.timestamp,
+        commentCount: nextProps.post.commentCount
+      });
+    }
+  }
 
   render() {
-    if (localStorage.getItem("deleted") === null) {
-      return <NotFoundPage />;
-    }
     const activeIndex = this.state.activeIndex;
     let x = this.props.categories;
     const dataArray = [];
@@ -150,20 +144,20 @@ class EditPost extends Component {
               ref="title"
               name="title"
               placeholder="Title"
-              value={localStorage.getItem("title")}
+              value={this.state.title}
               onChange={e => this.handleChange(e)}
             />
             Author:<input
               ref="author"
               name="author"
               placeholder="Author"
-              value={localStorage.getItem("author")}
+              value={this.state.author}
               onChange={e => this.handleChange(e)}
             />
             Category:<select
               ref="category"
               name="category"
-              value={localStorage.getItem("category")}
+              value={this.state.category}
               onChange={e => this.handleChange(e)}
             >
               {dataArray.map(function(first) {
@@ -180,24 +174,22 @@ class EditPost extends Component {
               ref="body"
               name="body"
               placeholder="Body"
-              value={localStorage.getItem("body")}
+              value={this.state.body}
               onChange={e => this.handleChange(e)}
             />
+            Time of Post:
+            <Moment format="MM/DD/YYYY HH:MM:SS">{this.state.timestamp}</Moment>
             <Container textAlign="left">
               VoteScore:
-              <Input transparent value={localStorage.getItem("voteScore")} />
+              <Input transparent value={this.props.post.voteScore} />
               <i
                 class="green angle up icon"
-                onClick={e => this.upvote(e, localStorage.getItem("id"))}
+                onClick={e => this.upvote(e, this.props.match.params.postId)}
               />
               <i
                 class="green angle down icon"
-                onClick={e => this.downvote(e, localStorage.getItem("id"))}
+                onClick={e => this.downvote(e, this.props.match.params.postId)}
               />
-              Time of Post:
-              <Moment format="MM/DD/YYYY HH:MM:SS">
-                {this.props.timestamp}
-              </Moment>
             </Container>
             <Button>
               <Link to="/">Go Back</Link>
@@ -205,7 +197,9 @@ class EditPost extends Component {
             <Button type="submit" onClick={this.save}>
               Save this Post
             </Button>
-            <Button onClick={e => this.delete(e, localStorage.getItem("id"))}>
+            <Button
+              onClick={e => this.delete(e, this.props.match.params.postId)}
+            >
               <Link to="/">Delete this Post</Link>
             </Button>
           </Form>
@@ -225,11 +219,7 @@ class EditPost extends Component {
             </Accordion>
           </Container>
           <Container textAlign="right">
-            <Link
-              to={`/${localStorage.getItem("category")}/${localStorage.getItem(
-                "id"
-              )}/addComment`}
-            >
+            <Link to={`/${this.state.category}/${this.props.match.params.postId}/addComment`}>
               Add a comment <i class="green plus icon" />
             </Link>
           </Container>
@@ -240,35 +230,25 @@ class EditPost extends Component {
     );
   }
 }
+function getPostById(posts, id) {
+  let post = posts.find(post => post.id == id);
+  return Object.assign({}, post);
+}
 function mapStateToProps(state, ownProps) {
+  const statePosts = Object.assign([], state.posts);
+  let post = {};
   const postId = ownProps.match.params.postId;
-  let k = Object.assign({}, state.posts);
-  for (var o in state.posts) {
-    let l = Object.assign({}, k[o]);
-    if (l.id === postId) {
-      setLocal("id", postId);
-      setLocal("title", l.title);
-      setLocal("author", l.author);
-      setLocal("body", l.body);
-      setLocal("category", l.category);
-      setLocal("voteScore", l.voteScore);
-      setLocal("time", l.time);
-      setLocal("comments", []);
-      setLocal("commentCount", l.commentCount);
-      setLocal("deleted", l.deleted);
-    }
+  if (postId && state.posts.length > 0) {
+    post = getPostById(state.posts, postId);
   }
   return {
     categories: state.categories,
+    post: post,
     posts: state.posts
   };
 }
 
-function setLocal(name, value) {
-  localStorage.setItem(name, value);
-}
-
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, ownProps) {
   return {
     postActions: bindActionCreators(postActions, dispatch),
     commentActions: bindActionCreators(commentActions, dispatch)

@@ -44,7 +44,7 @@ class Main extends Component {
           <Route
             exact
             path="/:category/:postId/edit"
-            render={({ history }) => <EditPost />}
+            render={({ history }) => <EditPost {...this.props}/>}
           />
           <Route
             exact
@@ -60,12 +60,12 @@ class Main extends Component {
           <Route
             exact
             path="/:category/:parentId/comments/:commentId"
-            render={({ history }) => <EditComment {...this.props} />}
+            render={({ history }) => <EditComment  />}
           />
           <Route
             exact
             path="/:category"
-            render={({ history }) => <ListPosts {...this.props} cats=''/>}
+            render={({ history }) => <ListPosts {...this.props} />}
           />
           <Route path="*" render={({ history }) => <NotFoundPage />} />
         </Switch>

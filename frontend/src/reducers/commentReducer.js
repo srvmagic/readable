@@ -35,6 +35,7 @@ export default function commentReducer(state = {}, action) {
         return comment;
       });
     case types.EDIT_COMMENT_SUCCESS:
+    console.log(action.comment)
         return action.comment
     default:
       return state;

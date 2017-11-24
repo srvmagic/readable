@@ -9,13 +9,13 @@ import Moment from "react-moment";
 
 class ListComments extends Component {
   static propTypes = {
-    postId: PropTypes.object.isRequired,
+    postId: PropTypes.object.isRequired,    
+    comments: PropTypes.array.isRequired    
   };  
   delete = (event, comment) => {
     var idx = this.props.comments.map(function(x) {return x.id; }).indexOf(comment.id);    
     event.preventDefault();
     this.props.actions.deleteComment(comment.id,idx);
-    localStorage.clear()    
   };
   upvote = (event, comment) => {
     event.preventDefault();
@@ -29,8 +29,10 @@ class ListComments extends Component {
     let comments = this.props.comments;
     var dataArray = [];
     for (var key in comments) {
+      console.log(comments)
+      
       if (!comments[key].deleted) {
-        dataArray.push(comments[key]);
+         dataArray.push(comments[key]);
       }
     }
     return (
@@ -89,6 +91,7 @@ class ListComments extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
+  console.log(state)
  
   return { comments: state.comments, posts: state.posts  };
 }

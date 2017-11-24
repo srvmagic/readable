@@ -71,6 +71,7 @@ class ListPosts extends Component {
               <Menu.Item
                 name="All Posts"
                 active={activeItem === "All Posts"}
+                color='red'
                 onClick={this.handleClick}
               />
             </Link>

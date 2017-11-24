@@ -125,6 +125,22 @@ export function loadSpecificPosts(category) {
   };
 }
 
+export function fetchAPostSuccess(post) {
+  return { type: types.FETCH_A_POST_SUCCESS, post };
+}
+
+export function fetchAPost(id) {
+  return function(dispatch) {
+    return ReadableApi.fetchPost(id)
+      .then(post => {
+        dispatch(fetchAPostSuccess(post));
+      })
+      .catch(error => {
+        throw error;
+      });
+  };
+}
+
 export function fetchSpecificPostsSuccess(posts) {
   return { type: types.LOAD_SPECIFIC_POSTS_SUCCESS, posts };
 }

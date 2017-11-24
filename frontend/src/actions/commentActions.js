@@ -43,6 +43,9 @@ export function editCommentSuccess(comment) {
 }
 
 export function editComment(id,orgcomment) {
+  console.log(id)
+  console.log(orgcomment)
+  
   return function(dispatch) {
     return ReadableApi.editComment(id,orgcomment).then(comment => {
       dispatch(editCommentSuccess(orgcomment));

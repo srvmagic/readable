@@ -21,7 +21,6 @@ export default function postReducer(state = {}, action) {
         }
       ];
     case types.REMOVE_POST_SUCCESS:
-    console.log(action.post)
       return [...state.slice(0, action.idx), ...state.slice(action.idx + 1)];
     case types.VOTE_POST_SUCCESS:
       return state.map(post => {
@@ -33,6 +32,8 @@ export default function postReducer(state = {}, action) {
         return post;
       });
     case types.EDIT_POST_SUCCESS:
+      return action.post;
+    case types.FETCH_A_POST_SUCCESS:
       return action.post;
     case types.SORT_SCORE_ASC_SUCCESS:
       const sortScoreAsc = key => (a, b) => a[key] > b[key];
