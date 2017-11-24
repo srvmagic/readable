@@ -15,7 +15,6 @@ class NotFoundPage extends Component{
             <Header as="h3" dividing color="red" textAlign="center">
               Page Not found
             </Header>
-				<Button><Link to="/">Back to Home</Link></Button>
 			</div>
 			</Container>
 			</div>

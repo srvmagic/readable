@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Table, Menu, Container } from "semantic-ui-react";
+import { Table, Menu, Container,Segment } from "semantic-ui-react";
 import * as postActions from "../actions/postActions";
 import { bindActionCreators } from "redux";
 import { Link, withRouter } from "react-router-dom";
@@ -29,6 +29,7 @@ class HeaderBar extends Component {
     }
     return (
       <div>
+      <Segment raised>
         <Container textAlign="left">
           <Menu pointing inverted>
             <Link to="/">
@@ -52,6 +53,7 @@ class HeaderBar extends Component {
             ))}
           </Menu>
         </Container>
+        </Segment>
         </div>
     );
   }

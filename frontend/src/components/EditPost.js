@@ -196,10 +196,7 @@ class EditPost extends Component {
                 onClick={e => this.downvote(e, this.props.match.params.postId)}
               />
             </Container>
-            <Button>
-              <Link to="/">Go Back</Link>
-            </Button>
-            <Button type="submit" onClick={this.save}>
+            <Button type="submit" onClick={e => this.saves(e)}>
               Save this Post
             </Button>
             <Button

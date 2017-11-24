@@ -5,6 +5,7 @@ import * as postActions from "../actions/postActions";
 import { bindActionCreators } from "redux";
 import { Link, withRouter } from "react-router-dom";
 import Moment from "react-moment";
+import HeaderBar from "./HeaderBar";
 
 class ListPosts extends Component {
   constructor(props) {
@@ -41,14 +42,6 @@ class ListPosts extends Component {
     event.preventDefault();
     this.props.actions.downvotePost(post.id);
   };
-  handleClick = (event, data) => {
-    if (event.target.text.toLowerCase() === "all posts") {
-      this.props.actions.loadPosts();
-    } else {
-      this.props.actions.loadSpecificPosts(event.target.text.toLowerCase());
-    }
-    this.setState({ activeItem: event.target.text.toLowerCase() });
-  };
   render() {
     const activeItem = this.state;
     const posts = this.props.posts;
@@ -65,29 +58,8 @@ class ListPosts extends Component {
     }
     return (
       <div>
-        <Container textAlign="left">
-          <Menu pointing inverted>
-            <Link to="/">
-              <Menu.Item
-                name="All Posts"
-                active={activeItem === "All Posts"}
-                color='red'
-                onClick={this.handleClick}
-              />
-            </Link>
+      <HeaderBar />
 
-            {cats.map(category => (
-              <Link to={`/${category}`}>
-                <Menu.Item
-                  name={category}
-                  link
-                  active={activeItem === { category }}
-                  onClick={this.handleClick}
-                />
-              </Link>
-            ))}
-          </Menu>
-        </Container>
         <Container textAlign="left">
           <Table celled sortable>
             <Table.Header color="green">
@@ -177,6 +149,7 @@ class ListPosts extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
+  console.log(state)
   return { posts: state.posts, categories: state.categories };
 }
 

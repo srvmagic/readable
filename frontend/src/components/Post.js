@@ -67,7 +67,6 @@ class Post extends Component {
             ref="body" 
               placeholder="Body"
             />
-          <Button> <Link to="/">Go Back</Link></Button>
           <Button type='submit'>Save</Button>
           </Form>
       </div>
