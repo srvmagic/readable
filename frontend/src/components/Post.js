@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import * as postActions from  '../actions/postActions';
 import { bindActionCreators } from 'redux';
 import { Container } from "semantic-ui-react";
+import HeaderBar from "./HeaderBar";
 
 class Post extends Component {
   static propTypes = {
@@ -41,6 +42,8 @@ class Post extends Component {
       dataArray.push(x.categories[o]);
     }
     return (
+      <div>
+      <HeaderBar />
       <Container textAlign="center">
       <div className="w3-card-4">
         <Header as="h3" dividing color ="green">
@@ -69,6 +72,7 @@ class Post extends Component {
           </Form>
       </div>
       </Container>
+      </div>
     );
   }
 }

@@ -8,6 +8,8 @@ import * as commentActions from "../actions/commentActions";
 import { bindActionCreators } from "redux";
 import { browserHistory } from "react-router";
 import NotFoundPage from "./NotFoundPage";
+import HeaderBar from "./HeaderBar";
+
 class EditComment extends Component {
   static propTypes = {
     comment: PropTypes.object.isRequired,
@@ -49,7 +51,7 @@ class EditComment extends Component {
     });
   }
   componentWillReceiveProps(nextProps) {
-    if (this.props.comment.id !== nextProps.comment.id) {
+    if (nextProps.comment.id !== undefined && this.props.comment.id !== nextProps.comment.id) {
       this.setState({
         author: nextProps.comment.author,
         body: nextProps.comment.body,
@@ -59,11 +61,14 @@ class EditComment extends Component {
       });
     }
   }
+
   render() {
     if(this.state.author === undefined){
       return (<NotFoundPage />)
     }    
     return (
+      <div>
+      <HeaderBar />
       <Container textAlign="center">
       <div className="w3-card-4">
         <Header as="h3" dividing color="blue">
@@ -91,6 +96,7 @@ class EditComment extends Component {
         </Form>
       </div>
       </Container>
+      </div>
     );
   }
 }

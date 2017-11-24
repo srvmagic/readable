@@ -18,6 +18,7 @@ import { bindActionCreators } from "redux";
 import { Container } from "semantic-ui-react";
 import ListComments from "./ListComments";
 import NotFoundPage from "./NotFoundPage";
+import HeaderBar from "./HeaderBar";
 
 class EditPost extends Component {
   static propTypes = {
@@ -74,16 +75,15 @@ class EditPost extends Component {
       voteScore: this.state.voteScore,
       commentCount: this.findAllComments(this.props.match.params.postId).length
     });
-    // this.setState({
-    //   timestamp: Date.now(),
-    //   title: this.refs.title.value,
-    //   body: this.refs.body.value,
-    //   author: this.refs.author.value,
-    //   category: this.refs.category.value,
-    //   voteScore: this.state.voteScore,
-    //   deleted: false,
-    //   commentCount: this.findAllComments(this.props.match.params.postId)
-    // });
+    this.setState({
+      timestamp: Date.now(),
+      title: this.refs.title.value,
+      body: this.refs.body.value,
+      author: this.refs.author.value,
+      category: this.refs.category.value,
+      voteScore: this.state.voteScore,
+      commentCount: this.findAllComments(this.props.match.params.postId)
+    });
   }
   delete = (event, id) => {
     var idx = this.props.posts
@@ -112,7 +112,7 @@ class EditPost extends Component {
     this.props.postActions.downvotePost(id);
   };
   componentWillReceiveProps(nextProps) {
-    if (this.props.post.id !== nextProps.post.id) {
+    if (nextProps.post.id !== undefined && this.props.post.id !== nextProps.post.id) {
       this.setState({
         title: nextProps.post.title,
         author: nextProps.post.author,
@@ -137,6 +137,8 @@ class EditPost extends Component {
       dataArray.push(x.categories[o]);
     }
     return (
+      <div>
+      <HeaderBar />
       <Container textAlign="center">
         <div className="w3-card-4">
           <Header as="h3" dividing color="green">
@@ -230,6 +232,7 @@ class EditPost extends Component {
           <div />
         </div>
       </Container>
+      </div>
     );
   }
 }

@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import * as commentActions from "../actions/commentActions";
 import { bindActionCreators } from "redux";
 import { Container } from "semantic-ui-react";
+import HeaderBar from "./HeaderBar";
 
 class Comment extends Component {
   static propTypes = {
@@ -34,6 +35,8 @@ class Comment extends Component {
   render() {
 
     return (
+      <div>
+      <HeaderBar />
       <Container textAlign="center">
         <div className="w3-card-4">
           <Header as="h3" dividing color="green">
@@ -52,6 +55,7 @@ class Comment extends Component {
           </Form>
         </div>
       </Container>
+      </div>
     );
   }
 }

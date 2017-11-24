@@ -18,6 +18,7 @@ import { bindActionCreators } from "redux";
 import { Container } from "semantic-ui-react";
 import ListComments from "./ListComments";
 import NotFoundPage from "./NotFoundPage";
+import HeaderBar from "./HeaderBar";
 
 class PostDetail extends Component {
   static propTypes = {
@@ -140,10 +141,10 @@ class PostDetail extends Component {
       return (<NotFoundPage />)
     }
     const activeIndex = this.state.activeIndex;
-    console.log(this.state.isEditing);
     if (!this.state.isEditing) {
       return (
         <div>
+      <HeaderBar />
           <Container textAlign="left">
             <div className="w3-card-4">
               <Header as="h3" dividing color="green" textAlign="center">
@@ -227,6 +228,8 @@ class PostDetail extends Component {
       dataArray.push(x.categories[o]);
     }
     return (
+      <div>
+      <HeaderBar />      
       <Container textAlign="center">
         <div className="w3-card-4">
           <Header as="h3" dividing color="green">
@@ -324,6 +327,7 @@ class PostDetail extends Component {
           <div />
         </div>
       </Container>
+      </div>
     );
   }
 }
