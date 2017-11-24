@@ -67,7 +67,7 @@ class Main extends Component {
             path="/:category"
             render={({ history }) => <ListPosts {...this.props} />}
           />
-          <Route path="*" render={({ history }) => <NotFoundPage />} />
+          <Route render={({ history }) => <NotFoundPage />} />
         </Switch>
       </div>
     );

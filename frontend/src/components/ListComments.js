@@ -29,7 +29,6 @@ class ListComments extends Component {
     let comments = this.props.comments;
     var dataArray = [];
     for (var key in comments) {
-      console.log(comments)
       
       if (!comments[key].deleted) {
          dataArray.push(comments[key]);
@@ -91,7 +90,6 @@ class ListComments extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  console.log(state)
  
   return { comments: state.comments, posts: state.posts  };
 }

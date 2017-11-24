@@ -64,19 +64,17 @@ class PostDetail extends Component {
     );
   }
   edits = event => {
-    console.log("in here");
     this.setState({
       isEditing: true
     });
   };
   preview = event => {
-    console.log("in here");
     this.setState({
       isEditing: false
     });
   };
   saves(event) {
-    event.preventDefault();
+    //event.preventDefault();
     this.props.postActions.editPost(this.props.match.params.postId, {
       id: this.props.match.params.postId,
       timestamp: Date.now(),
@@ -84,9 +82,18 @@ class PostDetail extends Component {
       body: this.refs.body.value,
       author: this.refs.author.value,
       category: this.refs.category.value,
-      voteScore: this.state.voteScore,
       commentCount: this.findAllComments(this.props.match.params.postId).length
     });
+    this.setState({
+      isEditing: true,
+      title: this.refs.title.value,
+      body: this.refs.body.value,
+      author: this.refs.author.value,
+      category: this.refs.category.value,
+      voteScore: this.state.voteScore,
+      commentCount: this.props.post.commentCount
+    });
+    console.log(this.state.voteScore)
   }
   delete = (event, id) => {
     var idx = this.props.posts
@@ -107,7 +114,6 @@ class PostDetail extends Component {
     event.preventDefault();
   }
   upvote = (event, id) => {
-    console.log(id);
     this.props.postActions.upvotePost(id);
   };
   downvote = (event, id) => {
@@ -115,10 +121,8 @@ class PostDetail extends Component {
     this.props.postActions.downvotePost(id);
   };
   componentWillReceiveProps(nextProps) {
-    if (this.props.post.id !== nextProps.post.id) {
-      console.log("in here");
+    if (nextProps.post.id !== undefined && this.props.post.id !== nextProps.post.id) {
       this.setState({
-        isEditing: false,
         title: nextProps.post.title,
         author: nextProps.post.author,
         body: nextProps.post.body,
@@ -132,9 +136,12 @@ class PostDetail extends Component {
   }
 
   render() {
+    if(this.state.title === undefined){
+      return (<NotFoundPage />)
+    }
     const activeIndex = this.state.activeIndex;
     console.log(this.state.isEditing);
-    if (this.state.isEditing === false) {
+    if (!this.state.isEditing) {
       return (
         <div>
           <Container textAlign="left">
@@ -146,9 +153,6 @@ class PostDetail extends Component {
                 <Segment>
                   Title:{" "}
                   <Input transparent value={this.state.title} size="25" />
-                </Segment>
-                <Segment>
-                  VoteScore: <Input transparent value={this.state.voteScore} />
                 </Segment>
                 <Segment>
                   Author:<Input transparent value={this.state.author} />
@@ -167,7 +171,7 @@ class PostDetail extends Component {
                 </Segment>
                 <Segment>
                   VoteScore:{" "}
-                  <Input transparent value={this.props.post.voteScore} />
+                  <Input transparent value={(this.props.post.voteScore || this.state.voteScore)} />
                   <i
                     class="green angle up icon"
                     onClick={e =>
@@ -270,7 +274,7 @@ class PostDetail extends Component {
             <Moment format="MM/DD/YYYY HH:MM:SS">{this.state.timestamp}</Moment>
             <Container textAlign="left">
               VoteScore:
-              <Input transparent value={this.props.post.voteScore} />
+              <Input transparent value={(this.props.post.voteScore || this.state.voteScore)} />
               <i
                 class="green angle up icon"
                 onClick={e => this.upvote(e, this.props.match.params.postId)}
@@ -283,7 +287,7 @@ class PostDetail extends Component {
             <Button>
               <Link to="/">Go Back</Link>
             </Button>
-            <Button type="submit" onClick={this.save}>
+            <Button type="submit" onClick={e => this.saves(e)}>
               Save this Post
             </Button>
             <Button

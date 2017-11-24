@@ -127,6 +127,9 @@ class EditPost extends Component {
   }
 
   render() {
+    if(this.state.title === undefined){
+      return (<NotFoundPage />)
+    }    
     const activeIndex = this.state.activeIndex;
     let x = this.props.categories;
     const dataArray = [];

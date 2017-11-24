@@ -60,6 +60,7 @@ export function editPost(id, opost) {
 }
 
 export function upvotePostSuccess(post) {
+  console.log(post)
   return {
     type: types.VOTE_POST_SUCCESS,
     post

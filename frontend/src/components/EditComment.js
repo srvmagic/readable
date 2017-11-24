@@ -35,7 +35,6 @@ class EditComment extends Component {
     });
   }
   handleSubmit(event) {
-    console.log(this.props.id)
     this.props.actions.editComment(this.props.match.params.commentId, {
       timestamp: Date.now(),
       id: this.props.match.params.commentId,
@@ -61,6 +60,9 @@ class EditComment extends Component {
     }
   }
   render() {
+    if(this.state.author === undefined){
+      return (<NotFoundPage />)
+    }    
     return (
       <Container textAlign="center">
       <div className="w3-card-4">
@@ -104,7 +106,6 @@ function mapStateToProps(state, ownProps) {
   if (commentId && state.comments.length > 0) {
     comment = getCommentById(state.comments, commentId);
   }
-  console.log(comment)
   return {
     comment: comment,
     comments: state.comments
