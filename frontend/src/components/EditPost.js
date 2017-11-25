@@ -7,7 +7,7 @@ import {
   Input,
   Segment,
   Accordion,
-  Icon
+  Icon,TextArea
 } from "semantic-ui-react";
 import { Link, withRouter, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
@@ -47,10 +47,10 @@ class EditPost extends Component {
     };
   }
 
-  handleClick = (e, titleProps, id) => {
-    const commentList = this.props.commentActions.loadSpecificComments(
+  handleClick = (e, titleProps) => {
+    const commentList = this.findAllComments(
       this.props.match.params.postId
-    );
+    ).then(result => result);
     const { index } = titleProps;
     const activeIndex = this.state.activeIndex;
     const newIndex = activeIndex === index ? -1 : index;
@@ -61,7 +61,9 @@ class EditPost extends Component {
   findAllComments(id) {
     return this.props.commentActions.loadSpecificComments(
       this.props.match.params.postId
-    );
+    ).then(function(response){
+      return response
+    });
   }
   saves(event) {
     event.preventDefault();
@@ -82,7 +84,7 @@ class EditPost extends Component {
       author: this.refs.author.value,
       category: this.refs.category.value,
       voteScore: this.state.voteScore,
-      commentCount: this.findAllComments(this.props.match.params.postId)
+      commentCount: this.findAllComments(this.props.match.params.postId).length
     });
   }
   delete = (event, id) => {
@@ -175,7 +177,7 @@ class EditPost extends Component {
                 }
               })}
             </select>
-            Body:<textarea
+            Body:<TextArea rows={2}
               ref="body"
               name="body"
               placeholder="Body"
@@ -184,7 +186,8 @@ class EditPost extends Component {
             />
             Time of Post:
             <Moment format="MM/DD/YYYY HH:MM:SS">{this.state.timestamp}</Moment>
-            <Container textAlign="left">
+            <Segment.Group>
+            <Segment textAlign='left'>
               VoteScore:
               <Input transparent value={this.props.post.voteScore} />
               <i
@@ -195,11 +198,12 @@ class EditPost extends Component {
                 class="green angle down icon"
                 onClick={e => this.downvote(e, this.props.match.params.postId)}
               />
-            </Container>
+            </Segment>
+            </Segment.Group>
             <Button type="submit" onClick={e => this.saves(e)}>
               Save this Post
             </Button>
-            <Button
+            <Button 
               onClick={e => this.delete(e, this.props.match.params.postId)}
             >
               <Link to="/">Delete this Post</Link>
@@ -222,7 +226,7 @@ class EditPost extends Component {
           </Container>
           <Container textAlign="right">
             <Link to={`/${this.state.category}/${this.props.match.params.postId}/addComment`}>
-              Add a comment <i class="green plus icon" />
+              Add a comment <i class="blue plus icon" />
             </Link>
           </Container>
 

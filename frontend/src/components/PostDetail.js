@@ -7,7 +7,7 @@ import {
   Input,
   Segment,
   Accordion,
-  Icon
+  Icon,TextArea
 } from "semantic-ui-react";
 import { Link, withRouter, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
@@ -94,7 +94,6 @@ class PostDetail extends Component {
       voteScore: this.state.voteScore,
       commentCount: this.props.post.commentCount
     });
-    console.log(this.state.voteScore)
   }
   delete = (event, id) => {
     var idx = this.props.posts
@@ -263,7 +262,7 @@ class PostDetail extends Component {
                 }
               })}
             </select>
-            Body:<textarea
+            Body:<TextArea rows={2}
               ref="body"
               name="body"
               placeholder="Body"
@@ -272,7 +271,8 @@ class PostDetail extends Component {
             />
             Time of Post:
             <Moment format="MM/DD/YYYY HH:MM:SS">{this.state.timestamp}</Moment>
-            <Container textAlign="left">
+            <Segment.Group>
+            <Segment textAlign='left'>
               VoteScore:
               <Input transparent value={(this.props.post.voteScore || this.state.voteScore)} />
               <i
@@ -283,8 +283,9 @@ class PostDetail extends Component {
                 class="green angle down icon"
                 onClick={e => this.downvote(e, this.props.match.params.postId)}
               />
-            </Container>
-            <Button type="submit" onClick={e => this.saves(e)}>
+            </Segment>
+            </Segment.Group>
+                        <Button type="submit" onClick={e => this.saves(e)}>
               Save this Post
             </Button>
             <Button

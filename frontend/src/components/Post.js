@@ -49,7 +49,7 @@ class Post extends Component {
         <Header as="h3" dividing color ="green">
           Add a Post
         </Header>
-        <Form ref="postForm" onSubmit={this.handleSubmit}>
+        <Form ref="postForm" >
             Title:<input ref="title" placeholder="Title" />
             Author:<input ref="author" placeholder="Author"  />
             Category:<select ref="category" >
@@ -67,7 +67,7 @@ class Post extends Component {
             ref="body" 
               placeholder="Body"
             />
-          <Button type='submit'>Save</Button>
+          <Button type='submit' onClick={e => this.handleSubmit(e)} >Save</Button>
           </Form>
       </div>
       </Container>

@@ -149,7 +149,6 @@ class ListPosts extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
-  console.log(state)
   return { posts: state.posts, categories: state.categories };
 }
 

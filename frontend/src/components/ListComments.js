@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Table } from "semantic-ui-react";
+import { Table,Label } from "semantic-ui-react";
 import * as commentActions from "../actions/commentActions";
 import { bindActionCreators } from "redux";
 import { Link, withRouter } from "react-router-dom";
@@ -34,10 +34,14 @@ class ListComments extends Component {
          dataArray.push(comments[key]);
       }
     }
+    const numComments = dataArray.length
     return (
       <div>
         <Table celled>
           <Table.Header>
+          <Table.Row>
+              <Table.HeaderCell><Label ribbon color='blue'>Total Comments: {numComments}</Label></Table.HeaderCell>
+            </Table.Row>          
             <Table.Row>
               <Table.HeaderCell>Time</Table.HeaderCell>
               <Table.HeaderCell>Author</Table.HeaderCell>
